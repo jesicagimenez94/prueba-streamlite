@@ -64,6 +64,7 @@ df['Margen_Bruto'] = df['Ingreso'] - (df['Costo_Unitario'] * df['Cantidad'])
 df['Mes'] = df['Fecha'].dt.strftime('%b')
 
 # -------------------- SIDEBAR PERSONALIZADO OSCURO --------------------
+
 with st.sidebar:
     st.markdown("""
     <div style="
@@ -112,6 +113,7 @@ with st.sidebar:
         </p>
     </div>
     """, unsafe_allow_html=True)
+
 
 # -------------------- FILTROS --------------------
 st.markdown("### 🎯 Filtros")
