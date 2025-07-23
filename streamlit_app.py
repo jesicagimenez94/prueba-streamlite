@@ -6,7 +6,15 @@ import numpy as np
 import altair as alt
 import random
 
-st.markdown("""
+
+
+
+# -------------------- CONFIGURACIÓN DE PÁGINA --------------------
+st.set_page_config(
+    page_title="ElectroHouse Dashboard",
+    page_icon="⚡",
+    layout="wide"
+    st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@600&display=swap');
 
@@ -64,13 +72,6 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
-
-
-# -------------------- CONFIGURACIÓN DE PÁGINA --------------------
-st.set_page_config(
-    page_title="ElectroHouse Dashboard",
-    page_icon="⚡",
-    layout="wide"
 )
 
 # -------------------- DATOS FICTICIOS --------------------
