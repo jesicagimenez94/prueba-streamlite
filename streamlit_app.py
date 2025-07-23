@@ -13,9 +13,10 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import random
+from datetime import datetime
 
-# Configuración general
-st.set_page_config(page_title="ElectroHouse Dashboard", layout="wide")
+# Configurar página
+st.set_page_config(page_title="ElectroHouse Dashboard", layout="wide", page_icon="⚡")
 
 # Simular datos ficticios
 np.random.seed(42)
@@ -39,8 +40,9 @@ df = pd.DataFrame({
 df['Ingreso'] = df['Cantidad'] * df['Precio_Unitario']
 df['Costo_Unitario'] = df['Precio_Unitario'] * np.random.uniform(0.5, 0.8, 100)
 df['Margen_Bruto'] = df['Ingreso'] - (df['Costo_Unitario'] * df['Cantidad'])
+df['Mes'] = df['Fecha'].dt.strftime('%b')
 
-# Sidebar branding personal
+# Sidebar con branding personal
 with st.sidebar:
     st.title("Jesica Gimenez")
     st.markdown("[🔗 Portfolio](https://portfolio-jesica-gimenez.vercel.app/)")
@@ -49,12 +51,12 @@ with st.sidebar:
     st.write("Dashboard de ventas con datos segmentados por región, canal y categorías.")
 
 # Filtros
-st.header("Filtros")
-col1, col2 = st.columns(2)
-region = col1.selectbox("Región", ["Todas"] + df["Región"].unique().tolist())
-canal = col2.selectbox("Canal de Venta", ["Todos"] + df["Canal_Venta"].unique().tolist())
+st.markdown("### 🎯 Filtros")
+with st.container():
+    col1, col2 = st.columns(2)
+    region = col1.selectbox("Seleccioná una región", ["Todas"] + sorted(df["Región"].unique()))
+    canal = col2.selectbox("Seleccioná un canal de venta", ["Todos"] + sorted(df["Canal_Venta"].unique()))
 
-# Aplicar filtros
 df_filtrado = df.copy()
 if region != "Todas":
     df_filtrado = df_filtrado[df_filtrado["Región"] == region]
@@ -62,18 +64,43 @@ if canal != "Todos":
     df_filtrado = df_filtrado[df_filtrado["Canal_Venta"] == canal]
 
 # KPIs
-st.markdown("## Métricas Clave")
+st.markdown("### 📈 Métricas Clave")
 kpi1, kpi2, kpi3 = st.columns(3)
 kpi1.metric("Total Ingresos", f"${df_filtrado['Ingreso'].sum():,.0f}")
 kpi2.metric("Ventas Totales", df_filtrado["ID_Venta"].nunique())
 kpi3.metric("Margen Bruto", f"${df_filtrado['Margen_Bruto'].sum():,.0f}")
 
-st.markdown("## Ventas por Categoría")
-chart_data = df_filtrado.groupby("Categoría")["Ingreso"].sum().reset_index()
-chart_data = chart_data.sort_values("Ingreso")
-st.bar_chart(chart_data.set_index("Categoría"))
+# Gráficos
+st.markdown("### 📊 Visualizaciones")
 
+with st.container():
+    col1, col2 = st.columns(2)
+
+    # Gráfico de ingresos por categoría
+    chart_cat = df_filtrado.groupby("Categoría")["Ingreso"].sum().sort_values(ascending=True)
+    col1.bar_chart(chart_cat)
+
+    # Gráfico de ingresos por mes
+    ingresos_mes = df_filtrado.groupby("Mes")["Ingreso"].sum().reindex(
+        ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    ).dropna()
+    col2.line_chart(ingresos_mes)
+
+with st.container():
+    col3, col4 = st.columns(2)
+
+    # Top 5 productos más vendidos
+    top_productos = df_filtrado.groupby("Producto")["Cantidad"].sum().sort_values(ascending=False).head(5)
+    col3.bar_chart(top_productos)
+
+    # Pie chart con categorías
+    st.markdown("#### Distribución por Categoría")
+    pie_data = df_filtrado.groupby("Categoría")["Ingreso"].sum()
+    col4.pyplot(pie_data.plot.pie(autopct='%1.1f%%', figsize=(4, 4)).get_figure())
 
 # Tabla de datos
-st.markdown("## Vista de Datos")
+st.markdown("### 📋 Vista de Datos")
 st.dataframe(df_filtrado)
+
+# Exportar CSV
+st.download_button("📥 Descargar datos filtrados en CSV", data=df_filtrado.to_csv(index=False), file_name="ventas_filtradas.csv", mime="text/csv")
