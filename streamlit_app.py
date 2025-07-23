@@ -1,4 +1,11 @@
 # Este bloque debe ir al inicio del script
+
+import streamlit as st
+import pandas as pd
+import numpy as np
+import altair as alt
+import random
+
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@600&display=swap');
@@ -58,11 +65,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-import streamlit as st
-import pandas as pd
-import numpy as np
-import altair as alt
-import random
 
 # -------------------- CONFIGURACIÓN DE PÁGINA --------------------
 st.set_page_config(
