@@ -8,17 +8,20 @@ Original file is located at
 """
 # Este código está pensado para usarse en entorno local con Streamlit
 # pero incluye todo para que lo puedas modificar/testear en Google Colab también
-
 import streamlit as st
 import pandas as pd
 import numpy as np
+import altair as alt
 import random
-from datetime import datetime
 
-# Configurar página
-st.set_page_config(page_title="ElectroHouse Dashboard", layout="wide", page_icon="⚡")
+# -------------------- CONFIGURACIÓN DE PÁGINA --------------------
+st.set_page_config(
+    page_title="ElectroHouse Dashboard",
+    page_icon="⚡",
+    layout="wide"
+)
 
-# Simular datos ficticios
+# -------------------- DATOS FICTICIOS --------------------
 np.random.seed(42)
 regiones = ['Centro', 'Norte', 'Sur', 'Cuyo', 'NEA', 'NOA', 'Patagonia']
 canales = ['Online', 'Retail', 'Mayorista']
@@ -42,15 +45,19 @@ df['Costo_Unitario'] = df['Precio_Unitario'] * np.random.uniform(0.5, 0.8, 100)
 df['Margen_Bruto'] = df['Ingreso'] - (df['Costo_Unitario'] * df['Cantidad'])
 df['Mes'] = df['Fecha'].dt.strftime('%b')
 
-# Sidebar con branding personal
+# -------------------- SIDEBAR - PERSONALIZACIÓN --------------------
 with st.sidebar:
-    st.title("Jesica Gimenez")
-    st.markdown("[🔗 Portfolio](https://portfolio-jesica-gimenez.vercel.app/)")
-    st.markdown("[💼 LinkedIn](https://www.linkedin.com/in/jesica-gimenez/)")
-    st.markdown("---")
-    st.write("Dashboard de ventas con datos segmentados por región, canal y categorías.")
+    st.markdown("""
+        <h2 style='color:#0083B8; text-align: center;'>Jesica Gimenez</h2>
+        <p style='text-align:center'>
+            <a href='https://portfolio-jesica-gimenez.vercel.app/' target='_blank'>🌐 Portfolio</a><br>
+            <a href='https://www.linkedin.com/in/jesica-gimenez/' target='_blank'>💼 LinkedIn</a>
+        </p>
+        <hr>
+        <p style='font-size: 14px; text-align: justify;'>Dashboard interactivo de ventas de ElectroHouse S.A. con segmentación por región, canal y categoría. Proyecto de análisis y visualización de datos para portfolio profesional.</p>
+    """, unsafe_allow_html=True)
 
-# Filtros
+# -------------------- FILTROS --------------------
 st.markdown("### 🎯 Filtros")
 with st.container():
     col1, col2 = st.columns(2)
@@ -63,44 +70,66 @@ if region != "Todas":
 if canal != "Todos":
     df_filtrado = df_filtrado[df_filtrado["Canal_Venta"] == canal]
 
-# KPIs
-st.markdown("### 📈 Métricas Clave")
+# -------------------- MÉTRICAS CLAVE --------------------
+st.markdown("### 📊 Métricas Clave")
 kpi1, kpi2, kpi3 = st.columns(3)
 kpi1.metric("Total Ingresos", f"${df_filtrado['Ingreso'].sum():,.0f}")
 kpi2.metric("Ventas Totales", df_filtrado["ID_Venta"].nunique())
 kpi3.metric("Margen Bruto", f"${df_filtrado['Margen_Bruto'].sum():,.0f}")
 
-# Gráficos
-st.markdown("### 📊 Visualizaciones")
+# -------------------- GRÁFICOS --------------------
+st.markdown("### 📈 Visualizaciones")
 
 with st.container():
     col1, col2 = st.columns(2)
 
-    # Gráfico de ingresos por categoría
-    chart_cat = df_filtrado.groupby("Categoría")["Ingreso"].sum().sort_values(ascending=True)
-    col1.bar_chart(chart_cat)
+    # Ingreso por categoría
+    chart1 = df_filtrado.groupby("Categoría")["Ingreso"].sum().reset_index()
+    bar1 = alt.Chart(chart1).mark_bar().encode(
+        y=alt.Y("Categoría:N", sort='-x'),
+        x=alt.X("Ingreso:Q", title="Ingreso Total"),
+        color=alt.Color("Categoría:N", legend=None)
+    ).properties(height=300)
+    col1.altair_chart(bar1, use_container_width=True)
 
-    # Gráfico de ingresos por mes
-    ingresos_mes = df_filtrado.groupby("Mes")["Ingreso"].sum().reindex(
+    # Ingreso por mes
+    chart2 = df_filtrado.groupby("Mes")["Ingreso"].sum().reindex(
         ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    ).dropna()
-    col2.line_chart(ingresos_mes)
+    ).reset_index().dropna()
+    chart2.columns = ["Mes", "Ingreso"]
+    bar2 = alt.Chart(chart2).mark_line(point=True).encode(
+        x="Mes",
+        y="Ingreso"
+    ).properties(height=300)
+    col2.altair_chart(bar2, use_container_width=True)
 
 with st.container():
     col3, col4 = st.columns(2)
 
-    # Top 5 productos más vendidos
-    top_productos = df_filtrado.groupby("Producto")["Cantidad"].sum().sort_values(ascending=False).head(5)
-    col3.bar_chart(top_productos)
+    # Top 5 productos por cantidad
+    top_prod = df_filtrado.groupby("Producto")["Cantidad"].sum().reset_index().sort_values("Cantidad", ascending=False).head(5)
+    chart3 = alt.Chart(top_prod).mark_bar().encode(
+        x="Producto",
+        y="Cantidad",
+        color=alt.Color("Producto", legend=None)
+    ).properties(height=300)
+    col3.altair_chart(chart3, use_container_width=True)
 
-    # Pie chart con categorías
-    st.markdown("#### Distribución por Categoría")
-    pie_data = df_filtrado.groupby("Categoría")["Ingreso"].sum()
-    col4.pyplot(pie_data.plot.pie(autopct='%1.1f%%', figsize=(4, 4)).get_figure())
+    # Ingreso por categoría - donut fake
+    pie_data = df_filtrado.groupby("Categoría")["Ingreso"].sum().reset_index()
+    pie = alt.Chart(pie_data).mark_arc(innerRadius=50).encode(
+        theta="Ingreso",
+        color="Categoría"
+    ).properties(height=300)
+    col4.altair_chart(pie, use_container_width=True)
 
-# Tabla de datos
-st.markdown("### 📋 Vista de Datos")
-st.dataframe(df_filtrado)
+# -------------------- TABLA Y EXPORT --------------------
+st.markdown("### 🧾 Vista de Datos")
+st.dataframe(df_filtrado, use_container_width=True)
 
-# Exportar CSV
-st.download_button("📥 Descargar datos filtrados en CSV", data=df_filtrado.to_csv(index=False), file_name="ventas_filtradas.csv", mime="text/csv")
+st.download_button(
+    label="📥 Descargar CSV de datos filtrados",
+    data=df_filtrado.to_csv(index=False),
+    file_name="ventas_filtradas.csv",
+    mime="text/csv"
+)
