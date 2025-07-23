@@ -1,20 +1,18 @@
-# Este bloque debe ir al inicio del script
-
 import streamlit as st
 import pandas as pd
 import numpy as np
 import altair as alt
 import random
 
-
-
-
 # -------------------- CONFIGURACIÓN DE PÁGINA --------------------
 st.set_page_config(
     page_title="ElectroHouse Dashboard",
     page_icon="⚡",
     layout="wide"
-    st.markdown("""
+)
+
+# -------------------- ESTILOS PERSONALIZADOS --------------------
+st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@600&display=swap');
 
@@ -72,7 +70,6 @@ st.set_page_config(
     }
     </style>
 """, unsafe_allow_html=True)
-)
 
 # -------------------- DATOS FICTICIOS --------------------
 np.random.seed(42)
@@ -115,13 +112,11 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-
 # -------------------- FILTROS --------------------
 st.markdown("### 🎯 Filtros")
-with st.container():
-    col1, col2 = st.columns(2)
-    region = col1.selectbox("Seleccioná una región", ["Todas"] + sorted(df["Región"].unique()))
-    canal = col2.selectbox("Seleccioná un canal de venta", ["Todos"] + sorted(df["Canal_Venta"].unique()))
+col1, col2 = st.columns(2)
+region = col1.selectbox("Seleccioná una región", ["Todas"] + sorted(df["Región"].unique()))
+canal = col2.selectbox("Seleccioná un canal de venta", ["Todos"] + sorted(df["Canal_Venta"].unique()))
 
 df_filtrado = df.copy()
 if region != "Todas":
@@ -139,53 +134,50 @@ kpi3.metric("Margen Bruto", f"${df_filtrado['Margen_Bruto'].sum():,.0f}")
 # -------------------- GRÁFICOS --------------------
 st.markdown("### 📈 Visualizaciones")
 
-with st.container():
-    col1, col2 = st.columns(2)
+col1, col2 = st.columns(2)
 
-    # Ingreso por categoría
-    chart1 = df_filtrado.groupby("Categoría")["Ingreso"].sum().reset_index()
-    bar1 = alt.Chart(chart1).mark_bar().encode(
-        y=alt.Y("Categoría:N", sort='-x'),
-        x=alt.X("Ingreso:Q", title="Ingreso Total"),
-        color=alt.Color("Categoría:N", legend=None)
-    ).properties(height=300)
-    col1.altair_chart(bar1, use_container_width=True)
+# Ingreso por categoría
+chart1 = df_filtrado.groupby("Categoría")["Ingreso"].sum().reset_index()
+bar1 = alt.Chart(chart1).mark_bar().encode(
+    y=alt.Y("Categoría:N", sort='-x'),
+    x=alt.X("Ingreso:Q", title="Ingreso Total"),
+    color=alt.Color("Categoría:N", legend=None)
+).properties(height=300)
+col1.altair_chart(bar1, use_container_width=True)
 
-    # Ingreso por mes
-    chart2 = df_filtrado.groupby("Mes")["Ingreso"].sum().reindex(
-        ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    ).reset_index().dropna()
-    chart2.columns = ["Mes", "Ingreso"]
-    bar2 = alt.Chart(chart2).mark_line(point=True).encode(
-        x="Mes",
-        y="Ingreso"
-    ).properties(height=300)
-    col2.altair_chart(bar2, use_container_width=True)
+# Ingreso por mes
+chart2 = df_filtrado.groupby("Mes")["Ingreso"].sum().reindex(
+    ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+).reset_index().dropna()
+chart2.columns = ["Mes", "Ingreso"]
+bar2 = alt.Chart(chart2).mark_line(point=True).encode(
+    x="Mes",
+    y="Ingreso"
+).properties(height=300)
+col2.altair_chart(bar2, use_container_width=True)
 
-with st.container():
-    col3, col4 = st.columns(2)
+col3, col4 = st.columns(2)
 
-    # Top 5 productos por cantidad
-    top_prod = df_filtrado.groupby("Producto")["Cantidad"].sum().reset_index().sort_values("Cantidad", ascending=False).head(5)
-    chart3 = alt.Chart(top_prod).mark_bar().encode(
-        x="Producto",
-        y="Cantidad",
-        color=alt.Color("Producto", legend=None)
-    ).properties(height=300)
-    col3.altair_chart(chart3, use_container_width=True)
+# Top 5 productos
+top_prod = df_filtrado.groupby("Producto")["Cantidad"].sum().reset_index().sort_values("Cantidad", ascending=False).head(5)
+chart3 = alt.Chart(top_prod).mark_bar().encode(
+    x="Producto",
+    y="Cantidad",
+    color=alt.Color("Producto", legend=None)
+).properties(height=300)
+col3.altair_chart(chart3, use_container_width=True)
 
-    # Ingreso por categoría - donut fake
-    pie_data = df_filtrado.groupby("Categoría")["Ingreso"].sum().reset_index()
-    pie = alt.Chart(pie_data).mark_arc(innerRadius=50).encode(
-        theta="Ingreso",
-        color="Categoría"
-    ).properties(height=300)
-    col4.altair_chart(pie, use_container_width=True)
+# Donut Chart por Categoría
+pie_data = df_filtrado.groupby("Categoría")["Ingreso"].sum().reset_index()
+pie = alt.Chart(pie_data).mark_arc(innerRadius=50).encode(
+    theta="Ingreso",
+    color="Categoría"
+).properties(height=300)
+col4.altair_chart(pie, use_container_width=True)
 
-# -------------------- TABLA Y EXPORT --------------------
+# -------------------- TABLA --------------------
 st.markdown("### 🧾 Vista de Datos")
 st.dataframe(df_filtrado, use_container_width=True)
-
 st.download_button(
     label="📥 Descargar CSV de datos filtrados",
     data=df_filtrado.to_csv(index=False),
