@@ -65,54 +65,13 @@ df['Mes'] = df['Fecha'].dt.strftime('%b')
 
 # -------------------- SIDEBAR PERSONALIZADO OSCURO --------------------
 
+# Sidebar branding personal
 with st.sidebar:
-    st.markdown("""
-    <div style="
-        background: #1e1e2f;
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-        color: #f0f0f0;
-        font-family: 'Montserrat', sans-serif;
-    ">
-        <h2 style="
-            font-family: 'Playfair Display', serif;
-            font-size: 1.6rem;
-            text-align: center;
-            color: #ba68c8;
-            margin-bottom: 1rem;
-        ">Jesica Gimenez</h2>
-
-        <div style="text-align:center; margin-bottom: 1rem;">
-            <a href='https://portfolio-jesica-gimenez.vercel.app/' target='_blank' style="
-                background: linear-gradient(to right, #9c27b0, #ba68c8, #f48fb1);
-                color: white;
-                padding: 0.4rem 0.8rem;
-                border-radius: 8px;
-                text-decoration: none;
-                font-weight: 600;
-                margin: 0.2rem;
-                display: inline-block;
-            ">🌐 Portfolio</a><br>
-            <a href='https://www.linkedin.com/in/jesica-gimenez/' target='_blank' style="
-                background: linear-gradient(to right, #7b1fa2, #9c27b0, #ec407a);
-                color: white;
-                padding: 0.4rem 0.8rem;
-                border-radius: 8px;
-                text-decoration: none;
-                font-weight: 600;
-                margin: 0.2rem;
-                display: inline-block;
-            ">💼 LinkedIn</a>
-        </div>
-
-        <p style="font-size: 13.5px; line-height: 1.5; text-align: justify;">
-            Dashboard de análisis de ventas con filtros por región, canal y categoría.<br>
-            Visualizado con Altair e inspirado en estética Tailwind y branding personal.
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
+    st.title("Jesica Gimenez")
+    st.markdown("[🔗 Portfolio](https://portfolio-jesica-gimenez.vercel.app/)")
+    st.markdown("[💼 LinkedIn](https://www.linkedin.com/in/jesica-gimenez/)")
+    st.markdown("---")
+    st.write("Dashboard de ventas con datos segmentados por región, canal y categorías.")
 
 
 # -------------------- FILTROS --------------------
