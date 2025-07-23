@@ -1,3 +1,62 @@
+# Este bloque debe ir al inicio del script
+st.markdown("""
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@600&display=swap');
+
+    html, body, [class*="css"]  {
+        background-color: hsl(36, 33%, 97%);
+        color: hsl(240, 10%, 3.9%);
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    h1, h2, h3, h4, h5 {
+        font-family: 'Playfair Display', serif;
+        letter-spacing: 0.01em;
+        text-shadow: 1px 1px 0px rgba(0,0,0,0.05);
+    }
+
+    .elegant-card {
+        padding: 1.5rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(156, 39, 176, 0.1);
+        margin-bottom: 1.5rem;
+    }
+
+    .elegant-header {
+        font-size: 1.6rem;
+        color: hsl(270, 76%, 45%);
+        text-align: center;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .link-button a {
+        background: linear-gradient(to right, #9c27b0, #ba68c8, #f48fb1);
+        color: white;
+        padding: 0.4rem 0.8rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-block;
+        margin-bottom: 0.4rem;
+    }
+
+    .link-button a:hover {
+        background: linear-gradient(to right, #7b1fa2, #9c27b0, #ec407a);
+        transform: scale(1.03);
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #ba68c8;
+        border-radius: 10px;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 import streamlit as st
 import pandas as pd
@@ -39,14 +98,20 @@ df['Mes'] = df['Fecha'].dt.strftime('%b')
 # -------------------- SIDEBAR - PERSONALIZACIÓN --------------------
 with st.sidebar:
     st.markdown("""
-        <h2 style='color:#0083B8; text-align: center;'>Jesica Gimenez</h2>
-        <p style='text-align:center'>
+    <div class="elegant-card">
+        <h2 class="elegant-header">Jesica Gimenez</h2>
+        <div class="link-button" style="text-align:center;">
             <a href='https://portfolio-jesica-gimenez.vercel.app/' target='_blank'>🌐 Portfolio</a><br>
             <a href='https://www.linkedin.com/in/jesica-gimenez/' target='_blank'>💼 LinkedIn</a>
+        </div>
+        <hr style="margin: 1rem 0;">
+        <p style="font-size: 14px; text-align: justify;">
+        Dashboard de análisis de ventas con filtros por región, canal y categoría.<br>
+        Visualizado con Altair e inspirado en estética Tailwind y branding personal.
         </p>
-        <hr>
-        <p style='font-size: 14px; text-align: justify;'>Dashboard interactivo de ventas de ElectroHouse S.A. con segmentación por región, canal y categoría. Proyecto de análisis y visualización de datos para portfolio profesional.</p>
+    </div>
     """, unsafe_allow_html=True)
+
 
 # -------------------- FILTROS --------------------
 st.markdown("### 🎯 Filtros")
