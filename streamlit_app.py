@@ -11,7 +11,6 @@ Original file is located at
 
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 import numpy as np
 import random
 
@@ -69,11 +68,11 @@ kpi1.metric("Total Ingresos", f"${df_filtrado['Ingreso'].sum():,.0f}")
 kpi2.metric("Ventas Totales", df_filtrado["ID_Venta"].nunique())
 kpi3.metric("Margen Bruto", f"${df_filtrado['Margen_Bruto'].sum():,.0f}")
 
-# Gráfico de ventas por categoría
 st.markdown("## Ventas por Categoría")
-fig, ax = plt.subplots()
-df_filtrado.groupby("Categoría")["Ingreso"].sum().sort_values().plot(kind="barh", ax=ax, color="skyblue")
-st.pyplot(fig)
+chart_data = df_filtrado.groupby("Categoría")["Ingreso"].sum().reset_index()
+chart_data = chart_data.sort_values("Ingreso")
+st.bar_chart(chart_data.set_index("Categoría"))
+
 
 # Tabla de datos
 st.markdown("## Vista de Datos")
