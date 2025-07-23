@@ -28,38 +28,6 @@ st.markdown("""
         text-shadow: 1px 1px 0px rgba(0,0,0,0.05);
     }
 
-    .elegant-card {
-        padding: 1.5rem;
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(156, 39, 176, 0.1);
-        margin-bottom: 1.5rem;
-    }
-
-    .elegant-header {
-        font-size: 1.6rem;
-        color: hsl(270, 76%, 45%);
-        text-align: center;
-        font-family: 'Playfair Display', serif;
-    }
-
-    .link-button a {
-        background: linear-gradient(to right, #9c27b0, #ba68c8, #f48fb1);
-        color: white;
-        padding: 0.4rem 0.8rem;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        display: inline-block;
-        margin-bottom: 0.4rem;
-    }
-
-    .link-button a:hover {
-        background: linear-gradient(to right, #7b1fa2, #9c27b0, #ec407a);
-        transform: scale(1.03);
-    }
-
     ::-webkit-scrollbar {
         width: 10px;
     }
@@ -95,19 +63,52 @@ df['Costo_Unitario'] = df['Precio_Unitario'] * np.random.uniform(0.5, 0.8, 100)
 df['Margen_Bruto'] = df['Ingreso'] - (df['Costo_Unitario'] * df['Cantidad'])
 df['Mes'] = df['Fecha'].dt.strftime('%b')
 
-# -------------------- SIDEBAR - PERSONALIZACIÓN --------------------
+# -------------------- SIDEBAR PERSONALIZADO OSCURO --------------------
 with st.sidebar:
     st.markdown("""
-    <div class="elegant-card">
-        <h2 class="elegant-header">Jesica Gimenez</h2>
-        <div class="link-button" style="text-align:center;">
-            <a href='https://portfolio-jesica-gimenez.vercel.app/' target='_blank'>🌐 Portfolio</a><br>
-            <a href='https://www.linkedin.com/in/jesica-gimenez/' target='_blank'>💼 LinkedIn</a>
+    <div style="
+        background: #1e1e2f;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        color: #f0f0f0;
+        font-family: 'Montserrat', sans-serif;
+    ">
+        <h2 style="
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            text-align: center;
+            color: #ba68c8;
+            margin-bottom: 1rem;
+        ">Jesica Gimenez</h2>
+
+        <div style="text-align:center; margin-bottom: 1rem;">
+            <a href='https://portfolio-jesica-gimenez.vercel.app/' target='_blank' style="
+                background: linear-gradient(to right, #9c27b0, #ba68c8, #f48fb1);
+                color: white;
+                padding: 0.4rem 0.8rem;
+                border-radius: 8px;
+                text-decoration: none;
+                font-weight: 600;
+                margin: 0.2rem;
+                display: inline-block;
+            ">🌐 Portfolio</a><br>
+            <a href='https://www.linkedin.com/in/jesica-gimenez/' target='_blank' style="
+                background: linear-gradient(to right, #7b1fa2, #9c27b0, #ec407a);
+                color: white;
+                padding: 0.4rem 0.8rem;
+                border-radius: 8px;
+                text-decoration: none;
+                font-weight: 600;
+                margin: 0.2rem;
+                display: inline-block;
+            ">💼 LinkedIn</a>
         </div>
-        <hr style="margin: 1rem 0;">
-        <p style="font-size: 14px; text-align: justify;">
-        Dashboard de análisis de ventas con filtros por región, canal y categoría.<br>
-        Visualizado con Altair e inspirado en estética Tailwind y branding personal.
+
+        <p style="font-size: 13.5px; line-height: 1.5; text-align: justify;">
+            Dashboard de análisis de ventas con filtros por región, canal y categoría.<br>
+            Visualizado con Altair e inspirado en estética Tailwind y branding personal.
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -131,7 +132,7 @@ kpi1.metric("Total Ingresos", f"${df_filtrado['Ingreso'].sum():,.0f}")
 kpi2.metric("Ventas Totales", df_filtrado["ID_Venta"].nunique())
 kpi3.metric("Margen Bruto", f"${df_filtrado['Margen_Bruto'].sum():,.0f}")
 
-# -------------------- GRÁFICOS --------------------
+# -------------------- VISUALIZACIONES --------------------
 st.markdown("### 📈 Visualizaciones")
 
 col1, col2 = st.columns(2)
@@ -167,7 +168,7 @@ chart3 = alt.Chart(top_prod).mark_bar().encode(
 ).properties(height=300)
 col3.altair_chart(chart3, use_container_width=True)
 
-# Donut Chart por Categoría
+# Donut chart (categorías)
 pie_data = df_filtrado.groupby("Categoría")["Ingreso"].sum().reset_index()
 pie = alt.Chart(pie_data).mark_arc(innerRadius=50).encode(
     theta="Ingreso",
@@ -175,9 +176,10 @@ pie = alt.Chart(pie_data).mark_arc(innerRadius=50).encode(
 ).properties(height=300)
 col4.altair_chart(pie, use_container_width=True)
 
-# -------------------- TABLA --------------------
+# -------------------- TABLA Y EXPORT --------------------
 st.markdown("### 🧾 Vista de Datos")
 st.dataframe(df_filtrado, use_container_width=True)
+
 st.download_button(
     label="📥 Descargar CSV de datos filtrados",
     data=df_filtrado.to_csv(index=False),
