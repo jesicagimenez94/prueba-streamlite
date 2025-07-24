@@ -83,12 +83,12 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# SIDEBAR con avatar usando st.image
+# SIDEBAR con avatar usando st.image (URL confiable)
 with st.sidebar:
-    avatar_url = "https://i.pinimg.com/originals/3e/52/86/3e52860ebc5dffb8a4f91e272fbb7b43.png"
-    st.image(avatar_url, width=110, use_column_width=False)
+    avatar_url = "https://i.imgur.com/uq01zRm.png"  # Avatar anime mujer con fondo transparente
+    st.image(avatar_url, width=110)
     st.markdown('<div class="sidebar-name">Ana Luna</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sidebar-role">Data Analyst</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-role">Analista de Datos</div>', unsafe_allow_html=True)
 
     selected = option_menu(
         menu_title=None,
@@ -110,17 +110,15 @@ with st.sidebar:
 np.random.seed(42)
 dates = pd.date_range(end=datetime.today(), periods=30)
 visits = np.random.poisson(lam=11000, size=30) + np.linspace(0, 5000, 30).astype(int)
-conversion_labels = ['Organic', 'Paid', 'Referral', 'Direct']
+conversion_labels = ['Orgánico', 'Pago', 'Referido', 'Directo']
 conversion_values = [45, 25, 15, 15]
-categories = ['Tech', 'Fashion', 'Home', 'Books', 'Sports']
+categories = ['Tecnología', 'Moda', 'Hogar', 'Libros', 'Deportes']
 cat_values = [2100, 1800, 1600, 1400, 1200]
 heatmap_data = np.random.randint(0, 100, size=(7, 24))
-days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+days = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
 hours = [f"{h}:00" for h in range(24)]
 kpi_values = [78, 54, 92]
 kpi_labels = ["Satisfacción", "Retención", "Crecimiento"]
-
-import plotly.graph_objects as go
 
 def circular_progress(value, label, color):
     fig = go.Figure(go.Indicator(
@@ -248,8 +246,8 @@ def show_dashboard():
     # HEADER
     col1, col2 = st.columns([3,1])
     with col1:
-        st.markdown(f'<h1 class="header-title">340,108 Unique Visitors</h1>', unsafe_allow_html=True)
-        st.markdown(f'<p class="header-subtitle">{datetime.today().strftime("%B %d, %Y")} - Overview del tráfico y comportamiento</p>', unsafe_allow_html=True)
+        st.markdown(f'<h1 class="header-title">340.108 Visitantes Únicos</h1>', unsafe_allow_html=True)
+        st.markdown(f'<p class="header-subtitle">{datetime.today().strftime("%d de %B de %Y")} - Visión general del tráfico y comportamiento</p>', unsafe_allow_html=True)
     with col2:
         st.write("")
 
@@ -270,7 +268,7 @@ def show_dashboard():
         st.markdown('<h3 style="color:#bb86fc; font-weight:700;">Visitas en el último mes</h3>', unsafe_allow_html=True)
         st.plotly_chart(line_chart(dates, visits), use_container_width=True)
     with graph_cols[1]:
-        st.markdown('<h3 style="color:#bb86fc; font-weight:700;">Fuentes de tráfico</h3>', unsafe_allow_html=True)
+        st.markdown('<h3 style="color:#bb86fc; font-weight:700;">Fuentes de Tráfico</h3>', unsafe_allow_html=True)
         st.plotly_chart(donut_chart(conversion_labels, conversion_values), use_container_width=True)
     with graph_cols[2]:
         st.markdown('<h3 style="color:#bb86fc; font-weight:700;">Ventas por Categoría</h3>', unsafe_allow_html=True)
@@ -281,7 +279,7 @@ def show_dashboard():
     # Últimos 2 gráficos en 2 columnas
     last_cols = st.columns(2)
     with last_cols[0]:
-        st.markdown('<h3 style="color:#bb86fc; font-weight:700;">Mapa de actividad semanal</h3>', unsafe_allow_html=True)
+        st.markdown('<h3 style="color:#bb86fc; font-weight:700;">Mapa de Actividad Semanal</h3>', unsafe_allow_html=True)
         st.plotly_chart(heatmap(heatmap_data, hours, days), use_container_width=True)
     with last_cols[1]:
         st.markdown('<h3 style="color:#bb86fc; font-weight:700;">Indicadores Clave Radar</h3>', unsafe_allow_html=True)
