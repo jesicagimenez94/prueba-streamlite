@@ -21,8 +21,8 @@ with open("estilos.css") as f:
 with st.sidebar:
     st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
     st.image("imagen1.png", width=200)
-    st.markdown('<div class="sidebar-name">Jesica Gimenez</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sidebar-role">Analista de Datos</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-name">Jesica Gimenez</div>', unsafe_allow_html=True, width=200)
+    st.markdown('<div class="sidebar-role">Analista de Datos</div>', unsafe_allow_html=True, width=200)
 
     selected = option_menu(
         menu_title=None,
