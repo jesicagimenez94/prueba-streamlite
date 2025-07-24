@@ -50,61 +50,67 @@ with st.sidebar:
     )
 
 # -------------------- MÉTRICAS PRINCIPALES --------------------
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3 = st.columns(3)
 
 col1.metric("Visitas", "340,108", "+3.2%")
 col2.metric("Conversiones", "25%", "+1.1%")
 col3.metric("Nuevos Usuarios", "50+", "+2.5%")
-col4.metric("Bounce Rate", "9%", "-0.6%")
 
-st.markdown("---")
-
-# -------------------- GRÁFICO DE LÍNEA (Plotly) --------------------
+# -------------------- GRÁFICO DE LÍNEA --------------------
 df = pd.DataFrame({
     "Mes": ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
     "Visitas": [12000, 18000, 26000, 22000, 28000, 34000]
 })
 
 line_chart = go.Figure()
-line_chart.add_trace(go.Scatter(x=df["Mes"], y=df["Visitas"], mode='lines+markers', name='Visitas',
+line_chart.add_trace(go.Scatter(x=df["Mes"], y=df["Visitas"], mode='lines+markers',
                                 line=dict(color='#4f46e5', width=3)))
 line_chart.update_layout(
     paper_bgcolor="#1e293b",
     plot_bgcolor="#1e293b",
     font=dict(color="white"),
+    margin=dict(l=20, r=20, t=40, b=20),
+    height=300,
     title="Visitas Mensuales"
 )
-st.plotly_chart(line_chart, use_container_width=True)
 
 # -------------------- GRÁFICOS DE DONA --------------------
-col5, col6 = st.columns(2)
+donut1 = go.Figure(data=[go.Pie(
+    labels=["Completado", "Pendiente"],
+    values=[65, 35],
+    hole=0.6,
+    marker_colors=["#10b981", "#374151"]
+)])
+donut1.update_layout(
+    showlegend=True,
+    paper_bgcolor="#1e293b",
+    font=dict(color="white"),
+    height=300,
+    margin=dict(t=40, b=10),
+    title="Progreso General"
+)
 
+donut2 = go.Figure(data=[go.Pie(
+    labels=["Desktop", "Mobile", "Tablet"],
+    values=[55, 30, 15],
+    hole=0.6,
+    marker_colors=["#3b82f6", "#f97316", "#10b981"]
+)])
+donut2.update_layout(
+    showlegend=True,
+    paper_bgcolor="#1e293b",
+    font=dict(color="white"),
+    height=300,
+    margin=dict(t=40, b=10),
+    title="Tráfico por Dispositivo"
+)
+
+# -------------------- DISTRIBUIR GRÁFICOS EN COLUMNAS --------------------
+col4, col5, col6 = st.columns(3)
+with col4:
+    st.plotly_chart(line_chart, use_container_width=True)
 with col5:
-    donut = go.Figure(data=[go.Pie(
-        labels=["Completado", "Pendiente"],
-        values=[65, 35],
-        hole=0.6,
-        marker_colors=["#10b981", "#374151"]
-    )])
-    donut.update_layout(
-        showlegend=True,
-        paper_bgcolor="#1e293b",
-        font=dict(color="white"),
-        title="Progreso General"
-    )
-    st.plotly_chart(donut, use_container_width=True)
-
+    st.plotly_chart(donut1, use_container_width=True)
 with col6:
-    donut2 = go.Figure(data=[go.Pie(
-        labels=["Desktop", "Mobile", "Tablet"],
-        values=[55, 30, 15],
-        hole=0.6,
-        marker_colors=["#3b82f6", "#f97316", "#10b981"]
-    )])
-    donut2.update_layout(
-        showlegend=True,
-        paper_bgcolor="#1e293b",
-        font=dict(color="white"),
-        title="Tráfico por Dispositivo"
-    )
     st.plotly_chart(donut2, use_container_width=True)
+
