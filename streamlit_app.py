@@ -32,20 +32,30 @@ st.markdown("""
         border-radius: 12px;
         padding-top: 1rem;
         padding-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* centra todo horizontalmente */
+    }
+    /* Contenedor para centrar contenido */
+    .sidebar-content {
+        text-align: center;
+        width: 100%;
     }
     /* Sidebar texto */
     .sidebar-name {
-        text-align: center;
         font-weight: 700;
         font-size: 1.25rem;
         margin-top: 0.5rem;
         color: #bb86fc;
     }
     .sidebar-role {
-        text-align: center;
         font-size: 0.9rem;
         color: #a0a0a0;
         margin-bottom: 1rem;
+    }
+    /* Ajustar menú para que quede centrado y ancho completo */
+    .option-menu {
+        width: 100% !important;
     }
     /* Contenedor principal */
     .main-container {
@@ -83,12 +93,13 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# SIDEBAR con imagen local
+# SIDEBAR con contenido centrado
 with st.sidebar:
-    st.image("imagen1.png", width=110)  # Imagen local en la misma carpeta que el script
+    st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
+    st.image("imagen1.png", width=110)
     st.markdown('<div class="sidebar-name">Ana Luna</div>', unsafe_allow_html=True)
     st.markdown('<div class="sidebar-role">Analista de Datos</div>', unsafe_allow_html=True)
-
+    
     selected = option_menu(
         menu_title=None,
         options=["Inicio", "Dashboard", "Configuración"],
@@ -97,12 +108,13 @@ with st.sidebar:
         default_index=1,
         orientation="vertical",
         styles={
-            "container": {"padding": "0!important", "background-color": "#1e1e2f"},
+            "container": {"padding": "0!important", "background-color": "#1e1e2f", "width":"100%"},
             "icon": {"color": "#8e8e8e", "font-size": "18px"},
-            "nav-link": {"font-size": "16px", "text-align": "left", "margin":"0px", "--hover-color": "#6200ea"},
+            "nav-link": {"font-size": "16px", "text-align": "center", "margin":"5px 0", "--hover-color": "#6200ea"},
             "nav-link-selected": {"background-color": "#bb86fc", "color": "#121212"},
         }
     )
+    st.markdown('</div>', unsafe_allow_html=True)
 
 
 # Datos ficticios
