@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 from streamlit_option_menu import option_menu
 from datetime import datetime
 
+# Configuración de página
 st.set_page_config(
     page_title="Dashboard Profesional",
     layout="wide",
@@ -12,6 +13,7 @@ st.set_page_config(
     page_icon="📊"
 )
 
+# Estilos CSS
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
@@ -20,26 +22,26 @@ st.markdown("""
         font-family: 'Montserrat', sans-serif;
         background-color: #121212;
         color: #e0e0e0;
-        margin: 0; padding: 0;
+        margin: 0;
+        padding: 0;
         overflow-x: hidden;
     }
     /* Sidebar */
     [data-testid="stSidebar"] {
         background-color: #1e1e2f;
         border-radius: 12px;
-        padding: 1rem 0;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
         display: flex;
         flex-direction: column;
-        justify-content: center;  /* CENTRAR VERTICAL */
-        align-items: center;      /* CENTRAR HORIZONTAL */
-        height: 100vh;            /* todo el alto de la ventana */
+        align-items: center; /* centra todo horizontalmente */
     }
-    /* Contenedor para imagen y textos centrados */
+    /* Contenedor para centrar contenido */
     .sidebar-content {
         text-align: center;
-        margin-bottom: 2rem;
         width: 100%;
     }
+    /* Sidebar texto */
     .sidebar-name {
         font-weight: 700;
         font-size: 1.25rem;
@@ -49,22 +51,11 @@ st.markdown("""
     .sidebar-role {
         font-size: 0.9rem;
         color: #a0a0a0;
-        margin-bottom: 0.5rem;
+        margin-bottom: 1rem;
     }
-    /* Forzar que menu ocupe todo el ancho y centrado */
+    /* Ajustar menú para que quede centrado y ancho completo */
     .option-menu {
         width: 100% !important;
-    }
-    /* Ajustes de los links del menú */
-    .nav-link {
-        font-size: 16px !important;
-        text-align: center !important;
-        margin: 5px 0 !important;
-    }
-    .nav-link-selected {
-        background-color: #bb86fc !important;
-        color: #121212 !important;
-        font-weight: 700 !important;
     }
     /* Contenedor principal */
     .main-container {
@@ -100,29 +91,6 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
-
-with st.sidebar:
-    st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
-    st.image("/mnt/data/54ee9d4d-cba2-46eb-97e5-85a7f84f645b.png", width=110)
-    st.markdown('<div class="sidebar-name">Ana Luna</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sidebar-role">Analista de Datos</div>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    selected = option_menu(
-        menu_title=None,
-        options=["Inicio", "Dashboard", "Configuración"],
-        icons=["house", "bar-chart-line", "gear"],
-        menu_icon="cast",
-        default_index=1,
-        orientation="vertical",
-        styles={
-            "container": {"padding": "0!important", "background-color": "#1e1e2f", "width":"100%"},
-            "icon": {"color": "#8e8e8e", "font-size": "18px"},
-            "nav-link": {"font-size": "16px", "text-align": "center", "margin":"5px 0", "--hover-color": "#6200ea"},
-            "nav-link-selected": {"background-color": "#bb86fc", "color": "#121212"},
-        }
-    )
-
 
 
 # SIDEBAR con contenido centrado
