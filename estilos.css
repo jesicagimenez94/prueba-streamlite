@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+html, body, [class*="css"]  {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Sidebar */
+[data-testid="stSidebar"] {
+    background-color: #1e1e2f;
+    border-radius: 12px;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sidebar-content {
+    text-align: center;
+    width: 100%;
+}
+
+.sidebar-name {
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-top: 0.5rem;
+    color: #bb86fc;
+}
+
+.sidebar-role {
+    font-size: 0.9rem;
+    color: #a0a0a0;
+    margin-bottom: 1rem;
+}
+
+/* Ajustar menú */
+.option-menu {
+    width: 100% !important;
+}
+
+/* Contenedor principal */
+.main-container {
+    background-color: #1e1e2f;
+    border-radius: 16px;
+    padding: 1rem 1.5rem 1.5rem 1.5rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    height: 100%;
+}
+
+/* Títulos */
+.header-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #bb86fc;
+    margin-bottom: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.header-subtitle {
+    font-size: 1rem;
+    color: #a0a0a0;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+/* KPI */
+.kpi-box {
+    background-color: #29294a;
+    border-radius: 14px;
+    padding: 0.8rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    text-align: center;
+}
