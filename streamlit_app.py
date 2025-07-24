@@ -10,17 +10,14 @@ st.set_page_config(
     layout="wide"
 )
 
-# -------------------- ESTILOS CSS --------------------
+# -------------------- ESTILOS CSS PERSONALIZADOS --------------------
 st.markdown("""
     <style>
-    body {
-        background-color: #0f172a;
-        color: #ffffff;
-    }
-    .css-1d391kg { background-color: #1e293b; }
     .stApp {
         background-color: #1e293b;
+        color: white;
     }
+    .css-1d391kg { background-color: #1e293b; }
     .big-font {
         font-size:36px !important;
         font-weight: bold;
@@ -31,11 +28,11 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# -------------------- SIDEBAR --------------------
+# -------------------- SIDEBAR CON MENÚ --------------------
 with st.sidebar:
     selected = option_menu(
-        menu_title="Main Menu",
-        options=["Dashboard", "Analytics", "Settings"],
+        menu_title="Menú Principal",
+        options=["Dashboard", "Análisis", "Configuración"],
         icons=["bar-chart-line", "pie-chart", "gear"],
         menu_icon="cast",
         default_index=0,
@@ -62,7 +59,7 @@ col4.metric("Bounce Rate", "9%", "-0.6%")
 
 st.markdown("---")
 
-# -------------------- GRÁFICO DE LÍNEA --------------------
+# -------------------- GRÁFICO DE LÍNEA (Plotly) --------------------
 df = pd.DataFrame({
     "Mes": ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
     "Visitas": [12000, 18000, 26000, 22000, 28000, 34000]
@@ -111,4 +108,3 @@ with col6:
         title="Tráfico por Dispositivo"
     )
     st.plotly_chart(donut2, use_container_width=True)
-
