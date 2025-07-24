@@ -13,85 +13,9 @@ st.set_page_config(
     page_icon="📊"
 )
 
-# Estilos CSS
-st.markdown("""
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
-
-    html, body, [class*="css"]  {
-        font-family: 'Montserrat', sans-serif;
-        background-color: #121212;
-        color: #e0e0e0;
-        margin: 0;
-        padding: 0;
-        overflow-x: hidden;
-    }
-    /* Sidebar */
-    [data-testid="stSidebar"] {
-        background-color: #1e1e2f;
-        border-radius: 12px;
-        padding-top: 1rem;
-        padding-bottom: 1rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* centra todo horizontalmente */
-    }
-    /* Contenedor para centrar contenido */
-    .sidebar-content {
-        text-align: center;
-        width: 100%;
-    }
-    /* Sidebar texto */
-    .sidebar-name {
-        font-weight: 700;
-        font-size: 1.25rem;
-        margin-top: 0.5rem;
-        color: #bb86fc;
-    }
-    .sidebar-role {
-        font-size: 0.9rem;
-        color: #a0a0a0;
-        margin-bottom: 1rem;
-    }
-    /* Ajustar menú para que quede centrado y ancho completo */
-    .option-menu {
-        width: 100% !important;
-    }
-    /* Contenedor principal */
-    .main-container {
-        background-color: #1e1e2f;
-        border-radius: 16px;
-        padding: 1rem 1.5rem 1.5rem 1.5rem;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-        height: 100%;
-    }
-    /* Encabezado */
-    .header-title {
-        font-size: 1.8rem;
-        font-weight: 700;
-        color: #bb86fc;
-        margin-bottom: 0;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    .header-subtitle {
-        font-size: 1rem;
-        color: #a0a0a0;
-        margin-top: 0;
-        margin-bottom: 1rem;
-    }
-    /* KPI container */
-    .kpi-box {
-        background-color: #29294a;
-        border-radius: 14px;
-        padding: 0.8rem;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        text-align: center;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
+# Cargar estilos CSS desde archivo externo
+with open("estilos.css") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 # SIDEBAR con contenido centrado
 with st.sidebar:
@@ -99,7 +23,7 @@ with st.sidebar:
     st.image("imagen1.png", width=100)
     st.markdown('<div class="sidebar-name">Ana Luna</div>', unsafe_allow_html=True)
     st.markdown('<div class="sidebar-role">Analista de Datos</div>', unsafe_allow_html=True)
-    
+
     selected = option_menu(
         menu_title=None,
         options=["Inicio", "Dashboard", "Configuración"],
@@ -116,7 +40,6 @@ with st.sidebar:
     )
     st.markdown('</div>', unsafe_allow_html=True)
 
-
 # Datos ficticios
 np.random.seed(42)
 dates = pd.date_range(end=datetime.today(), periods=30)
@@ -131,6 +54,7 @@ hours = [f"{h}:00" for h in range(24)]
 kpi_values = [78, 54, 92]
 kpi_labels = ["Satisfacción", "Retención", "Crecimiento"]
 
+# Gráficos
 def circular_progress(value, label, color):
     fig = go.Figure(go.Indicator(
         mode="gauge+number",
@@ -244,7 +168,7 @@ def radar_chart(labels, values):
     )
     return fig
 
-
+# Secciones
 def show_inicio():
     st.markdown("""
         <div class="main-container">
@@ -254,15 +178,11 @@ def show_inicio():
     """, unsafe_allow_html=True)
 
 def show_dashboard():
-    # HEADER
     col1, col2 = st.columns([3,1])
     with col1:
         st.markdown(f'<h1 class="header-title">340.108 Visitantes Únicos</h1>', unsafe_allow_html=True)
         st.markdown(f'<p class="header-subtitle">{datetime.today().strftime("%d de %B de %Y")} - Visión general del tráfico y comportamiento</p>', unsafe_allow_html=True)
-    with col2:
-        st.write("")
 
-    # KPIs circulares
     kpi_cols = st.columns(3)
     colors = ['#bb86fc', '#6200ea', '#03dac6']
     for i, col in enumerate(kpi_cols):
@@ -273,7 +193,6 @@ def show_dashboard():
 
     st.write("---")
 
-    # Gráficos en 3 columnas
     graph_cols = st.columns(3)
     with graph_cols[0]:
         st.markdown('<h3 style="color:#bb86fc; font-weight:700;">Visitas en el último mes</h3>', unsafe_allow_html=True)
@@ -287,7 +206,6 @@ def show_dashboard():
 
     st.write("---")
 
-    # Últimos 2 gráficos en 2 columnas
     last_cols = st.columns(2)
     with last_cols[0]:
         st.markdown('<h3 style="color:#bb86fc; font-weight:700;">Mapa de Actividad Semanal</h3>', unsafe_allow_html=True)
@@ -303,12 +221,9 @@ def show_configuracion():
         <div class="main-container">
         <h1 class="header-title">Configuración</h1>
         <p class="header-subtitle">Ajustes y preferencias de la aplicación.</p>
-        <ul>
-            <li>Próximamente...</li>
-        </ul>
+        <ul><li>Próximamente...</li></ul>
         </div>
     """, unsafe_allow_html=True)
-
 
 # MAIN
 if selected == "Inicio":
@@ -317,4 +232,3 @@ elif selected == "Dashboard":
     show_dashboard()
 else:
     show_configuracion()
-
