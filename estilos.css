@@ -31,14 +31,14 @@ html, body, [class*="css"]  {
     font-size: 1.25rem;
     margin-top: 0.5rem;
     color: #bb86fc;
-    width: 100%;
+    width: 200px;
 }
 
 .sidebar-role {
     font-size: 0.9rem;
     color: #a0a0a0;
     margin-bottom: 1rem;
-    width: 100%;
+    width: 200px;
 }
 
 /* Ajustar menú */
