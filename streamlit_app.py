@@ -1,149 +1,114 @@
 import streamlit as st
+import plotly.graph_objects as go
 import pandas as pd
-import numpy as np
-import altair as alt
-import random
+from streamlit_option_menu import option_menu
 
 # -------------------- CONFIGURACIÓN DE PÁGINA --------------------
 st.set_page_config(
-    page_title="ElectroHouse Dashboard",
-    page_icon="⚡",
+    page_title="Dashboard Streamlit",
+    page_icon="📊",
     layout="wide"
 )
 
-# -------------------- ESTILOS PERSONALIZADOS --------------------
+# -------------------- ESTILOS CSS --------------------
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@600&display=swap');
-
-    html, body, [class*="css"]  {
-        background-color: hsl(36, 33%, 97%);
-        color: hsl(240, 10%, 3.9%);
-        font-family: 'Montserrat', sans-serif;
+    body {
+        background-color: #0f172a;
+        color: #ffffff;
     }
-
-    h1, h2, h3, h4, h5 {
-        font-family: 'Playfair Display', serif;
-        letter-spacing: 0.01em;
-        text-shadow: 1px 1px 0px rgba(0,0,0,0.05);
+    .css-1d391kg { background-color: #1e293b; }
+    .stApp {
+        background-color: #1e293b;
     }
-
-    ::-webkit-scrollbar {
-        width: 10px;
+    .big-font {
+        font-size:36px !important;
+        font-weight: bold;
     }
-
-    ::-webkit-scrollbar-thumb {
-        background: #ba68c8;
-        border-radius: 10px;
+    .metric-label {
+        color: #94a3b8;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# -------------------- DATOS FICTICIOS --------------------
-np.random.seed(42)
-regiones = ['Centro', 'Norte', 'Sur', 'Cuyo', 'NEA', 'NOA', 'Patagonia']
-canales = ['Online', 'Retail', 'Mayorista']
-categorias = ['Electrodomésticos', 'Tecnología', 'Herramientas', 'Iluminación', 'Climatización']
-fechas = pd.date_range(start='2024-01-01', periods=100)
+# -------------------- SIDEBAR --------------------
+with st.sidebar:
+    selected = option_menu(
+        menu_title="Main Menu",
+        options=["Dashboard", "Analytics", "Settings"],
+        icons=["bar-chart-line", "pie-chart", "gear"],
+        menu_icon="cast",
+        default_index=0,
+        styles={
+            "container": {"padding": "5px", "background-color": "#1e1e2f"},
+            "icon": {"color": "#ffffff", "font-size": "20px"},
+            "nav-link": {
+                "color": "#ffffff",
+                "text-align": "left",
+                "margin": "5px",
+                "--hover-color": "#4f46e5",
+            },
+            "nav-link-selected": {"background-color": "#4f46e5"},
+        }
+    )
 
+# -------------------- MÉTRICAS PRINCIPALES --------------------
+col1, col2, col3, col4 = st.columns(4)
+
+col1.metric("Visitas", "340,108", "+3.2%")
+col2.metric("Conversiones", "25%", "+1.1%")
+col3.metric("Nuevos Usuarios", "50+", "+2.5%")
+col4.metric("Bounce Rate", "9%", "-0.6%")
+
+st.markdown("---")
+
+# -------------------- GRÁFICO DE LÍNEA --------------------
 df = pd.DataFrame({
-    'Fecha': random.choices(fechas, k=100),
-    'ID_Venta': [f"V{1000+i}" for i in range(100)],
-    'Cliente': [f"Cliente_{i}" for i in range(100)],
-    'Región': np.random.choice(regiones, 100),
-    'Producto': [f"Producto_{i%10}" for i in range(100)],
-    'Categoría': np.random.choice(categorias, 100),
-    'Cantidad': np.random.randint(1, 10, 100),
-    'Precio_Unitario': np.random.randint(5000, 30000, 100),
-    'Canal_Venta': np.random.choice(canales, 100)
+    "Mes": ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
+    "Visitas": [12000, 18000, 26000, 22000, 28000, 34000]
 })
 
-df['Ingreso'] = df['Cantidad'] * df['Precio_Unitario']
-df['Costo_Unitario'] = df['Precio_Unitario'] * np.random.uniform(0.5, 0.8, 100)
-df['Margen_Bruto'] = df['Ingreso'] - (df['Costo_Unitario'] * df['Cantidad'])
-df['Mes'] = df['Fecha'].dt.strftime('%b')
-
-# -------------------- SIDEBAR PERSONALIZADO OSCURO --------------------
-
-# Sidebar branding personal
-with st.sidebar:
-    st.title("Jesica Gimenez")
-    st.markdown("[🔗 Portfolio](https://portfolio-jesica-gimenez.vercel.app/)")
-    st.markdown("[💼 LinkedIn](https://www.linkedin.com/in/jesica-gimenez/)")
-    st.markdown("---")
-    st.write("Dashboard de ventas con datos segmentados por región, canal y categorías.")
-
-
-# -------------------- FILTROS --------------------
-st.markdown("### 🎯 Filtros")
-col1, col2 = st.columns(2)
-region = col1.selectbox("Seleccioná una región", ["Todas"] + sorted(df["Región"].unique()))
-canal = col2.selectbox("Seleccioná un canal de venta", ["Todos"] + sorted(df["Canal_Venta"].unique()))
-
-df_filtrado = df.copy()
-if region != "Todas":
-    df_filtrado = df_filtrado[df_filtrado["Región"] == region]
-if canal != "Todos":
-    df_filtrado = df_filtrado[df_filtrado["Canal_Venta"] == canal]
-
-# -------------------- MÉTRICAS CLAVE --------------------
-st.markdown("### 📊 Métricas Clave")
-kpi1, kpi2, kpi3 = st.columns(3)
-kpi1.metric("Total Ingresos", f"${df_filtrado['Ingreso'].sum():,.0f}")
-kpi2.metric("Ventas Totales", df_filtrado["ID_Venta"].nunique())
-kpi3.metric("Margen Bruto", f"${df_filtrado['Margen_Bruto'].sum():,.0f}")
-
-# -------------------- VISUALIZACIONES --------------------
-st.markdown("### 📈 Visualizaciones")
-
-col1, col2 = st.columns(2)
-
-# Ingreso por categoría
-chart1 = df_filtrado.groupby("Categoría")["Ingreso"].sum().reset_index()
-bar1 = alt.Chart(chart1).mark_bar().encode(
-    y=alt.Y("Categoría:N", sort='-x'),
-    x=alt.X("Ingreso:Q", title="Ingreso Total"),
-    color=alt.Color("Categoría:N", legend=None)
-).properties(height=300)
-col1.altair_chart(bar1, use_container_width=True)
-
-# Ingreso por mes
-chart2 = df_filtrado.groupby("Mes")["Ingreso"].sum().reindex(
-    ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-).reset_index().dropna()
-chart2.columns = ["Mes", "Ingreso"]
-bar2 = alt.Chart(chart2).mark_line(point=True).encode(
-    x="Mes",
-    y="Ingreso"
-).properties(height=300)
-col2.altair_chart(bar2, use_container_width=True)
-
-col3, col4 = st.columns(2)
-
-# Top 5 productos
-top_prod = df_filtrado.groupby("Producto")["Cantidad"].sum().reset_index().sort_values("Cantidad", ascending=False).head(5)
-chart3 = alt.Chart(top_prod).mark_bar().encode(
-    x="Producto",
-    y="Cantidad",
-    color=alt.Color("Producto", legend=None)
-).properties(height=300)
-col3.altair_chart(chart3, use_container_width=True)
-
-# Donut chart (categorías)
-pie_data = df_filtrado.groupby("Categoría")["Ingreso"].sum().reset_index()
-pie = alt.Chart(pie_data).mark_arc(innerRadius=50).encode(
-    theta="Ingreso",
-    color="Categoría"
-).properties(height=300)
-col4.altair_chart(pie, use_container_width=True)
-
-# -------------------- TABLA Y EXPORT --------------------
-st.markdown("### 🧾 Vista de Datos")
-st.dataframe(df_filtrado, use_container_width=True)
-
-st.download_button(
-    label="📥 Descargar CSV de datos filtrados",
-    data=df_filtrado.to_csv(index=False),
-    file_name="ventas_filtradas.csv",
-    mime="text/csv"
+line_chart = go.Figure()
+line_chart.add_trace(go.Scatter(x=df["Mes"], y=df["Visitas"], mode='lines+markers', name='Visitas',
+                                line=dict(color='#4f46e5', width=3)))
+line_chart.update_layout(
+    paper_bgcolor="#1e293b",
+    plot_bgcolor="#1e293b",
+    font=dict(color="white"),
+    title="Visitas Mensuales"
 )
+st.plotly_chart(line_chart, use_container_width=True)
+
+# -------------------- GRÁFICOS DE DONA --------------------
+col5, col6 = st.columns(2)
+
+with col5:
+    donut = go.Figure(data=[go.Pie(
+        labels=["Completado", "Pendiente"],
+        values=[65, 35],
+        hole=0.6,
+        marker_colors=["#10b981", "#374151"]
+    )])
+    donut.update_layout(
+        showlegend=True,
+        paper_bgcolor="#1e293b",
+        font=dict(color="white"),
+        title="Progreso General"
+    )
+    st.plotly_chart(donut, use_container_width=True)
+
+with col6:
+    donut2 = go.Figure(data=[go.Pie(
+        labels=["Desktop", "Mobile", "Tablet"],
+        values=[55, 30, 15],
+        hole=0.6,
+        marker_colors=["#3b82f6", "#f97316", "#10b981"]
+    )])
+    donut2.update_layout(
+        showlegend=True,
+        paper_bgcolor="#1e293b",
+        font=dict(color="white"),
+        title="Tráfico por Dispositivo"
+    )
+    st.plotly_chart(donut2, use_container_width=True)
+
