@@ -83,10 +83,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# SIDEBAR con avatar usando st.image (URL confiable)
+# SIDEBAR con imagen local
 with st.sidebar:
-    avatar_url = "https://i.imgur.com/uq01zRm.png"  # Avatar anime mujer con fondo transparente
-    st.image(avatar_url, width=110)
+    st.image("imagen1.png", width=110)  # Imagen local en la misma carpeta que el script
     st.markdown('<div class="sidebar-name">Ana Luna</div>', unsafe_allow_html=True)
     st.markdown('<div class="sidebar-role">Analista de Datos</div>', unsafe_allow_html=True)
 
