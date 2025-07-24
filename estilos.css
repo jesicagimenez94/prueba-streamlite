@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
-html, body, [class*="css"] {
+html, body, [class*="css"]  {
     font-family: 'Montserrat', sans-serif;
     background-color: #121212;
     color: #e0e0e0;
@@ -13,7 +13,7 @@ html, body, [class*="css"] {
 [data-testid="stSidebar"] {
     background-color: #1e1e2f;
     border-radius: 12px;
-    padding-top: 1.5rem;
+    padding-top: 1rem;
     padding-bottom: 1rem;
     display: flex;
     flex-direction: column;
@@ -22,65 +22,28 @@ html, body, [class*="css"] {
 
 .sidebar-content {
     text-align: center;
-    width: 200px;
+    width: 200px; /* Igual al ancho de la imagen */
     margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem; /* Espaciado consistente entre elementos */
-}
-
-/* Contenedor para la imagen de perfil */
-.profile-image-container {
-    width: 200px;
-    height: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 0.5rem;
-}
-
-/* Imagen de perfil */
-.profile-image {
-    width: 100%;
-    max-width: 200px;
-    height: auto;
-    border-radius: 12px;
-    object-fit: cover;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
 }
 
 .sidebar-name {
     font-weight: 700;
     font-size: 1.25rem;
-    margin: 0; /* Eliminar márgenes por defecto */
+    margin-top: 0.5rem;
     color: #bb86fc;
     width: 100%;
-    text-align: center;
-    line-height: 1.2;
 }
 
 .sidebar-role {
     font-size: 0.9rem;
     color: #a0a0a0;
-    margin: 0; /* Eliminar márgenes por defecto */
+    margin-bottom: 1rem;
     width: 100%;
-    text-align: center;
-    line-height: 1.3;
-}
-
-/* Separador visual opcional */
-.sidebar-divider {
-    width: 80%;
-    height: 1px;
-    background-color: #3a3a5c;
-    margin: 1rem 0;
 }
 
 /* Ajustar menú */
 .option-menu {
     width: 100% !important;
-    margin-top: 1rem;
 }
 
 /* Contenedor principal */
@@ -117,23 +80,4 @@ html, body, [class*="css"] {
     padding: 0.8rem;
     box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     text-align: center;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .sidebar-content {
-        width: 180px;
-    }
-    
-    .profile-image-container {
-        width: 180px;
-    }
-    
-    .sidebar-name {
-        font-size: 1.1rem;
-    }
-    
-    .sidebar-role {
-        font-size: 0.85rem;
-    }
 }
