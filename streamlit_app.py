@@ -125,6 +125,29 @@ with st.sidebar:
 
 
 
+# SIDEBAR con contenido centrado
+with st.sidebar:
+    st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
+    st.image("imagen1.png", width=110)
+    st.markdown('<div class="sidebar-name">Ana Luna</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-role">Analista de Datos</div>', unsafe_allow_html=True)
+    
+    selected = option_menu(
+        menu_title=None,
+        options=["Inicio", "Dashboard", "Configuración"],
+        icons=["house", "bar-chart-line", "gear"],
+        menu_icon="cast",
+        default_index=1,
+        orientation="vertical",
+        styles={
+            "container": {"padding": "0!important", "background-color": "#1e1e2f", "width":"100%"},
+            "icon": {"color": "#8e8e8e", "font-size": "18px"},
+            "nav-link": {"font-size": "16px", "text-align": "center", "margin":"5px 0", "--hover-color": "#6200ea"},
+            "nav-link-selected": {"background-color": "#bb86fc", "color": "#121212"},
+        }
+    )
+    st.markdown('</div>', unsafe_allow_html=True)
+
 
 # Datos ficticios
 np.random.seed(42)
