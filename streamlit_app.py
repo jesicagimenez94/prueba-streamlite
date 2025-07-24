@@ -20,8 +20,8 @@ with open("estilos.css") as f:
 # SIDEBAR con contenido centrado
 with st.sidebar:
     st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
-    st.image("imagen1.png", width=100)
-    st.markdown('<div class="sidebar-name">Ana Luna</div>', unsafe_allow_html=True)
+    st.image("imagen1.png", width=150)
+    st.markdown('<div class="sidebar-name">Jesica Gimenez</div>', unsafe_allow_html=True)
     st.markdown('<div class="sidebar-role">Analista de Datos</div>', unsafe_allow_html=True)
 
     selected = option_menu(
