@@ -178,7 +178,7 @@ def show_dashboard():
 
 # Barra lateral con avatar, nombre y menú
 with st.sidebar:
-    st.image("54ee9d4d-cba2-46eb-97e5-85a7f84f645b.png", width=150)
+    st.image("imagen1.png", width=150)
     st.markdown("""
         <div style="text-align: center;">
             <h2 style="margin-bottom: 0;">Jesica Gimenez</h2>
