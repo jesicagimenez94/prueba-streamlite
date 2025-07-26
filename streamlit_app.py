@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 from streamlit_option_menu import option_menu
-from datetime import datetime, timedelta
+from datetime import datetime
 
 # Configuración de la página
 st.set_page_config(page_title="Dashboard Moderno", layout="wide")
@@ -53,6 +53,14 @@ heatmap_data = np.random.randint(0, 100, size=(7, 24))
 kpi_values = [72, 85, 64]
 kpi_labels = ["Retención", "Satisfacción", "Conversión"]
 
+# DataFrame con columnas nuevas "Fuente" y "Categoría"
+df_visitas = pd.DataFrame({
+    "Fecha": dates,
+    "Visitas": visits,
+    "Fuente": np.random.choice(conversion_labels, size=len(dates)),
+    "Categoría": np.random.choice(categories, size=len(dates))
+})
+
 # Funciones de visualización
 def circular_progress(value, label, color):
     fig = go.Figure(go.Indicator(
@@ -99,37 +107,41 @@ def radar_chart(labels, values):
     fig.update_layout(polar=dict(bgcolor="#1e1e2f"), height=300, paper_bgcolor="#1e1e2f", font_color="white")
     return fig
 
-# Función para mostrar la página principal
+# Función para mostrar la página principal con filtros sin título y filtrado múltiple
 def show_dashboard():
     st.markdown(f'<h1 class="header-title">Dashboard de Datos</h1>', unsafe_allow_html=True)
 
-    # Filtros
-    st.markdown("### Filtros")
-    colf1, colf2 = st.columns(2)
+    colf1, colf2, colf3, colf4 = st.columns([2,2,2,2])
     with colf1:
         fecha_min = st.date_input("Fecha desde:", dates.min().date())
     with colf2:
         fecha_max = st.date_input("Fecha hasta:", dates.max().date())
+    with colf3:
+        fuentes_seleccionadas = st.multiselect("Fuente", options=conversion_labels, default=conversion_labels)
+    with colf4:
+        categorias_seleccionadas = st.multiselect("Categoría", options=categories, default=categories)
 
-    # Aplicar filtro a las visitas por fecha
-    df_visitas = pd.DataFrame({
-        "Fecha": dates,
-        "Visitas": visits
-    })
-    df_filtrado = df_visitas[(df_visitas["Fecha"] >= pd.to_datetime(fecha_min)) & (df_visitas["Fecha"] <= pd.to_datetime(fecha_max))]
+    # Filtrado combinado
+    df_filtrado = df_visitas[
+        (df_visitas["Fecha"] >= pd.to_datetime(fecha_min)) &
+        (df_visitas["Fecha"] <= pd.to_datetime(fecha_max)) &
+        (df_visitas["Fuente"].isin(fuentes_seleccionadas)) &
+        (df_visitas["Categoría"].isin(categorias_seleccionadas))
+    ]
 
     col1, col2 = st.columns([3,1])
     with col1:
         st.markdown(f'<h1 class="header-title">{df_filtrado["Visitas"].sum():,} Visitantes Únicos</h1>', unsafe_allow_html=True)
         st.markdown(f'<p class="header-subtitle">{datetime.today().strftime("%d de %B de %Y")} - Visión general del tráfico y comportamiento</p>', unsafe_allow_html=True)
 
-    # KPIs
+    # KPIs con títulos arriba
     kpi_cols = st.columns(3)
     colors = ['#bb86fc', '#6200ea', '#03dac6']
     for i, col in enumerate(kpi_cols):
         with col:
+            st.markdown(f'<h4 style="color:#bb86fc; text-align:center;">{kpi_labels[i]}</h4>', unsafe_allow_html=True)
             st.markdown(f'<div class="kpi-box">', unsafe_allow_html=True)
-            st.plotly_chart(circular_progress(kpi_values[i], kpi_labels[i], colors[i]), use_container_width=True)
+            st.plotly_chart(circular_progress(kpi_values[i], "", colors[i]), use_container_width=True)
             st.markdown('</div>', unsafe_allow_html=True)
 
     st.write("---")
@@ -160,13 +172,13 @@ def show_dashboard():
 
     st.write("---")
 
-    # Tabla con todos los datos
+    # Tabla con detalle ampliado
     st.markdown("### 📄 Detalle de Datos")
-    st.dataframe(df_visitas, use_container_width=True)
+    st.dataframe(df_filtrado[["Fecha", "Visitas", "Fuente", "Categoría"]], use_container_width=True)
 
 # Barra lateral con avatar, nombre y menú
 with st.sidebar:
-    st.image("imagen1.png", width=150)
+    st.image("54ee9d4d-cba2-46eb-97e5-85a7f84f645b.png", width=150)
     st.markdown("""
         <div style="text-align: center;">
             <h2 style="margin-bottom: 0;">Jesica Gimenez</h2>
