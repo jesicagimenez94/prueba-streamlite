@@ -186,4 +186,25 @@ with st.sidebar:
         </div>
     """, unsafe_allow_html=True)
 
+    selected = option_menu(
+        menu_title="Menú",
+        options=["Inicio", "Dashboard", "Configuración"],
+        icons=["house", "bar-chart", "gear"],
+        menu_icon="cast",
+        default_index=1,
+        styles={
+            "container": {"background-color": "#1e1e2f"},
+            "icon": {"color": "white"},
+            "nav-link": {"color": "#bbb", "font-size": "16px"},
+            "nav-link-selected": {"background-color": "#3700b3", "color": "white"},
+        }
+    )
+
+# Mostrar contenido según selección
+if selected == "Inicio":
+    st.title("Bienvenida a tu Panel de Control")
+elif selected == "Dashboard":
+    show_dashboard()
+elif selected == "Configuración":
+    st.title("Configuración")
 
