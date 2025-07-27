@@ -109,7 +109,7 @@ def radar_chart(labels, values):
 
 # Función para mostrar la página principal con filtros sin título y filtrado múltiple
 def show_dashboard():
-    st.markdown(f'<h1 class="header-title">Dashboard de Datos</h1>', unsafe_allow_html=True)
+    st.markdown(f'<h1 class="header-title">Dashboard de Ventas</h1>', unsafe_allow_html=True)
 
     colf1, colf2, colf3, colf4 = st.columns([2,2,2,2])
     with colf1:
@@ -186,25 +186,4 @@ with st.sidebar:
         </div>
     """, unsafe_allow_html=True)
 
-    selected = option_menu(
-        menu_title="Menú",
-        options=["Inicio", "Dashboard", "Configuración"],
-        icons=["house", "bar-chart", "gear"],
-        menu_icon="cast",
-        default_index=1,
-        styles={
-            "container": {"background-color": "#1e1e2f"},
-            "icon": {"color": "white"},
-            "nav-link": {"color": "#bbb", "font-size": "16px"},
-            "nav-link-selected": {"background-color": "#3700b3", "color": "white"},
-        }
-    )
-
-# Mostrar contenido según selección
-if selected == "Inicio":
-    st.title("Bienvenida a tu Panel de Control")
-elif selected == "Dashboard":
-    show_dashboard()
-elif selected == "Configuración":
-    st.title("Configuración")
 
