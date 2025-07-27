@@ -120,6 +120,8 @@ def show_dashboard():
         fuentes_seleccionadas = st.multiselect("Fuente", options=conversion_labels, default=conversion_labels)
     with colf4:
         categorias_seleccionadas = st.multiselect("Categoría", options=categories, default=categories)
+        
+
 
     # Filtrado combinado
     df_filtrado = df_visitas[
@@ -131,7 +133,7 @@ def show_dashboard():
 
     col1, col2 = st.columns([3,1])
     with col1:
-        st.markdown(f'<h1 class="header-title">{df_filtrado["Visitas"].sum():,} Visitantes Únicos</h1>', unsafe_allow_html=True)
+        st.markdown(f'<h1 class="header-title">{df_filtrado["Visitas"].sum():.} Visitantes Únicos</h1>', unsafe_allow_html=True)
         st.markdown(f'<p class="header-subtitle">{datetime.today().strftime("%d de %B de %Y")} - Visión general del tráfico y comportamiento</p>', unsafe_allow_html=True)
 
     # KPIs con títulos arriba
